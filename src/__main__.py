@@ -2,6 +2,7 @@ import sys
 
 # Local imports
 import errors as errors
+import execution as execution
 
 __version__ = "0.1rc1"
 pyversion = str(float(sys.version_info[0] + sys.version_info[1]) / 10)
