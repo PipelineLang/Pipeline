@@ -16,9 +16,9 @@ def lineToList(line):
 
     # Check if strings have to be delt with
     # For now, crash. TODO: implement strings
-    if '"' in line:
-        print("Strings not yet implemented")
-        exit()
+    # if '"' in line:
+    #     print("Strings not yet implemented")
+    #     exit()
     
     # For now, just add the rest ofo the line
     # This needs to be changed once strings are implemented
@@ -29,10 +29,13 @@ def lineToList(line):
     for instruction in unparsed_output:
         i = 0
         for char in instruction:
-            if char == ",":
+            if char == "," and instruction[0] != '"':
                 if i != (len(instruction) - 1):
                     errors.syntaxError(instruction, line_number)
             i += 1
+        if instruction[0] == '"':
+        	instruction = instruction.replace("_", " ").replace('"', "")
+        
         if instruction[len(instruction) - 1] == ",":
             output.append(instruction[:-1])
         else:

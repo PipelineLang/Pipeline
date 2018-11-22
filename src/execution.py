@@ -50,10 +50,13 @@ def fetch(line, _):
 		
 
 def put(line, _):
-	try:
-		pipe.append(eval(line[1]))
-	except:
-		errors.unknown(line)
+	if line[1][0] == "t":
+		pipe.append(temp[int(line[1][1:])])
+	else:
+		try:
+			pipe.append(eval(line[1]))
+		except:
+			errors.unknown(line)
 
 def add(line, _):
 	if type(line[1]) != type("") and type(line[2]) != type(""):
@@ -120,14 +123,41 @@ def import_command(line, args):
 		i += 1
 
 def export(line, _):
-	value = pipe.pop()
+	try:
+		value = pipe.pop()
+	except:
+		errors.emptyPipeError(line)
 	exit(value)
 
 def disp(line, _):
-	print(pipe.pop())
+	if len(line) == 1:
+		value = pipe.pop()
+		print(value)
+		pipe.append(value)
+		
+	else:
+		print(line[1])
 
-def nop(_, _):
+def nop(line, _):
 	return
+
+def cmp_command(line, _ ):
+	half1 = []
+	half2 = []
+	
+	latch = False
+	for item in line:
+		if item == ":":
+			latch = True
+		
+		if latch:
+			half2.append(item)
+		else:
+			half1.append(item)
+	
+	compare = half1[2] if type(half1) != type("") else temp[int(half1[2][1:])]
+	if temp[int(half1[1][1:])] == eval(compare):
+		run(half2[1:],0, [None])
 
 
 
@@ -143,5 +173,6 @@ instruction_map = {
 	"import":import_command,
 	"export":export,
 	"disp":disp,
-	"nop":nop
+	"nop":nop,
+	"cmp":cmp_command
 }
