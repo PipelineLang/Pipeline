@@ -4,7 +4,7 @@ import sys
 import errors as errors
 import execution as execution
 
-__version__ = "0.1rc1"
+__version__ = "0.2rc1"
 # Parse the version_info data into a string
 pyversion = str(list(sys.version_info)[:-2])[1:-1].strip("'").strip(" ").replace(",", ".").replace(" ", "")
 
@@ -58,7 +58,7 @@ if len(sys.argv) == 1:
 		# format the line
 		inp = lineToList(inp)
 		# execute the line
-		execution.run(inp, line_number)
+		execution.run(inp, line_number, sys.argv[2:])
 		line_number += 1
 	exit(0)
 
@@ -90,5 +90,5 @@ for line in infile.split("\n"):
 # Execute the program
 line_number = 1
 for line in code:
-    execution.run(line, line_number)
+    execution.run(line, line_number, sys.argv[2:])
     line_number += 1
