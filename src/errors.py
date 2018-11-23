@@ -42,3 +42,7 @@ def unknown(command):
 	print("An unknown error occured...")
 	print(command)
 	exit(1)
+
+def pipeTooSmallError(instruction):
+	print("[Runtime Error] The pipe is too small to execute instruction: "+ instruction)
+	exit(1)

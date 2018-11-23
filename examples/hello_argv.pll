@@ -1,0 +1,8 @@
+import 1
+put "Hello"
+disp
+rem
+disp
+rem
+put 2
+export
