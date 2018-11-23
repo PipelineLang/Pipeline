@@ -1,4 +1,5 @@
 import sys
+import os
 
 # Local imports
 import errors as errors
@@ -8,17 +9,18 @@ __version__ = "0.2rc1"
 # Parse the version_info data into a string
 pyversion = str(list(sys.version_info)[:-2])[1:-1].strip("'").strip(" ").replace(",", ".").replace(" ", "")
 
+# Get the pipeline stdl path
+if "PL_STDL_PATH" in os.environ:
+	lib_path = os.environ["PL_STDL_PATH"]
+	env = True
+else:
+	env = False
+
 def lineToList(line):
     output = []
     unparsed_output = []
     # Append the instruction
     unparsed_output.append(line.split(" ")[0])
-
-    # Check if strings have to be delt with
-    # For now, crash. TODO: implement strings
-    # if '"' in line:
-    #     print("Strings not yet implemented")
-    #     exit()
     
     # For now, just add the rest ofo the line
     # This needs to be changed once strings are implemented
@@ -40,6 +42,7 @@ def lineToList(line):
             output.append(instruction[:-1])
         else:
             output.append(instruction)
+    
     
     return output
 
@@ -74,13 +77,33 @@ except:
     # Print an error message an exit
     errors.fileLoadError(sys.argv[1])
 
+# Check for includes
+incl_infile = ""
+for line in infile.split("\n"):
+	line2 = line.split(" ")
+	if "include" in line2:
+		file = line2[1]
+		if env:
+			with open(lib_path + file + ".pll", "r") as f:
+				data = f.read()
+				data = data.replace("EOF", "")
+				f.close()
+		else:
+			errors.noSTDLError()
+	else:
+		data = line
+			
+	incl_infile += data + "\n"
+
 # Parse through the file
 code = []
 line_number = 1
-for line in infile.split("\n"):
+for line in incl_infile.split("\n"):
     # Skip blank lines
     if line == "":
         continue
+    if line[0] == "#":
+    	continue
 	
     output = lineToList(line)
     

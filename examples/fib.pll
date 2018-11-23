@@ -1,23 +1,7 @@
-import 2
 
-:: Check
-fetch t1
-cmp t1, t10 : export
-put t1
+:: Calculate
+add
 disp
-run Calc
-::
 
-:: Calc
-fetch t1
-fetch t2
-put t2
-put t1
-add t1, t2
-
-run Check
-::
-
-<-Main->
-fetch t10
-run Check
+put 1
+put 2

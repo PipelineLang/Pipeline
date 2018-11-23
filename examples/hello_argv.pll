@@ -1,8 +1,9 @@
-import 1
+import 2
 put "Hello"
 disp
 rem
 disp
 rem
-put 2
+put 0
+cmp : put 5
 export

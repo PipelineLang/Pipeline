@@ -10,14 +10,17 @@ pipe = collections.deque([])
 
 # Keep track of allowed instructions
 # This list is ordered in a way that slightly cuts down on search time
-valid_instructions = ["rem", "put", "add", "sub", "mul", "div", "cmp", "disp", "import", "export", "nop"]
-exceptions = ["#"]
+valid_instructions = ["rem", "put", "add", "sub", "mul", "div", "cmp", "disp", "import", "export", "nop", "ncmp", "hold", "rls"]
+exceptions = ["#", "::"]
+
+# Make a place to put the "held" value
+hvar = 0
 
 # Instruction map is at the bottom of the file
 
 def run(command, line, args):
     # Check if an invalid instruction was passed in
-    if not command[0] in valid_instructions and command[0][0] not in exceptions:
+    if not command[0] in valid_instructions and command[0] not in exceptions:
         errors.invalidInstructionError(command, line)
     
     # Run the instruction
@@ -111,6 +114,33 @@ def disp(line, args):
 def nop(line, args):
 	return
 
+def cmp_command(line, args):
+	command = line[2:]
+	checkPipe("cmp", 2)
+	val1 = fixType(pipe.pop())
+	val2 = fixType(pipe.pop())
+	pipe.append(val2)
+	pipe.append(val1)
+	if val1 == val2:
+		run(command, 0, [])
+
+def ncmp(line, args):
+	command = line[2:]
+	checkPipe("cmp", 2)
+	val1 = fixType(pipe.pop())
+	val2 = fixType(pipe.pop())
+	pipe.append(val2)
+	pipe.append(val1)
+	if val1 != val2:
+		run(command, 0, [])
+
+def hold(line, args):
+	hvar = pipe.pop()
+
+def rls(line, args):
+	pipe.append(hvar)
+	
+
 
 # Map each instruction to a function
 instruction_map = {
@@ -123,6 +153,9 @@ instruction_map = {
 	"import":import_command,
 	"export":export,
 	"disp":disp,
-	"nop":nop
-	# "cmp":cmp_command
+	"nop":nop,
+	"cmp":cmp_command,
+	"ncmp":ncmp,
+	"hold":hold,
+	"rls":rls
 }

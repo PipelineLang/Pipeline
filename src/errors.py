@@ -46,3 +46,7 @@ def unknown(command):
 def pipeTooSmallError(instruction):
 	print("[Runtime Error] The pipe is too small to execute instruction: "+ instruction)
 	exit(1)
+
+def noSTDLError():
+	print("Environment variable not set: PL_STDL_PATH")
+	exit(1)

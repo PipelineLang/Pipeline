@@ -1,0 +1,24 @@
+put "-h"
+include checkflag
+
+put 1
+ncmp : export
+
+rem
+
+put "Run:_pli_-h_to_see_this_message"
+put "pli_can_also_be_run_in_interactive_mode_when_no_arguments_are_provided"
+put "Usage:_pli_<file>_<options>"
+put "Pipeline_Help"
+
+disp
+rem
+disp
+rem
+disp
+rem
+disp
+rem
+
+put 0
+export
